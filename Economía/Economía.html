@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Simulador de crédito</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="cuotaFija.js"></script>
+  <script type="text/javascript" src="datos.js"></script>
+  <script type="text/javascript" src ="mostrarOcultar.js"></script>
+  <script src="jspdf/dist/jspdf.min.js"></script>
+  <script src="jspdf.plugin.autotable.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="estiloCredito.css"/>
+</head>
+<body background="Fondo1.jpg">
+
+<!-- ************************************************Inicio del formulario TOMA DE DATOS DE USUARIO******** -->
+<div class="container" >
+
+  <div class="tab-content" style="background-image: url('white.png'); width: 100%; height: 100%; border: #E9E7E6 5px solid; border-radius: 20px;">
+
+        <form name="datos" id="0" method="post" >
+    <h2> <center> <strong> Proyección de crédito </strong> </center> </h2> 
+    <br>
+    <p>Todos los campos deben ser completados para una correcta diligencia del cuadro de amortización</p>
+    <br>
+
+    <font><strong>Nombre de usuario: </strong> </font>
+    <input type="text" name="nombre" id="nombre" placeholder="Nombre de usuario" required="" value="" class="redondeado">
+    <br><br>
+    <font><strong>Número de identificación: </strong> </font> <input type="number" name="identificacion" id="identificacion" value="" required="" class="redondeado" placeholder="XXX.XXX.XXX">
+    <br><br>
+    <font><strong>Monto:</strong> </font><input type="number" name="monto" id="capital" required="" class="redondeado" placeholder="XXX.XXX.XXX" >
+    <br><br>
+</form>
+  </div>
+
+  <ul class="nav nav-pills nav-justified redondeado"  style="background-color:white;">
+    <li class="active" onclick="pestana('1')"><a data-toggle="tab" href="#home">CRÉDITO CON CUOTA FIJA</a></li>
+    <li onclick="pestana('2')"><a data-toggle="tab" href="#menu1">CRÉDITO CON PERIODO DE GRACIA</a></li>
+   
+  </ul>
+
+<!-- ************************************************Inicio del formulario de CREDITO CON CUOTA FIJA******** -->
+
+  <div class="tab-content"  style="background-color:white; border: #E9E7E6 5px solid; border-radius: 20px;">
+    <div id="home" class="tab-pane fade in active">
+      <h3><center><strong> CRÉDITO CON CUOTA FIJA </strong> </center> </h3>
+      <br>
+      <form action="" name="cuotaFija" id="1" method="post">
+          
+        <font><strong>Seleccionar plazo</strong> </font>  <select name="plazo" id="plazo" class="redondeado">
+            
+          <option value="36" selected>36 meses</option> 
+          <option value="48">48 meses</option>
+          <option value="60">60 meses</option>
+          <option value="72">72 meses</option>
+          <option value="84">84 meses</option>
+
+        </select>
+        <br><br>
+
+        <font><strong>Amortización</strong> </font>  <select name="amortizacion" class="redondeado" id="amortizacion">
+            
+          <option value="mensual" selected>Mensual</option> 
+          <option value="bimestral">Bimestral</option>
+            
+        </select>
+        <br><br>
+        
+      <h4>Tasa de interes:</h4>
+      <font><strong>Efectiva anual (EA)</strong> </font>
+      <input type="text" name="tasa_EA_cf" id="tasa_EA_cf" class="redondeado" placeholder="%" onchange="calcular_tasa('EA')" />
+      <br><br>
+      <font><strong>Nominal Anual (NA)</strong> </font>
+      <input type="text" name="tasa_NA_cf" id="tasa_NA_cf" class="redondeado" placeholder="%" onchange="calcular_tasa('NA')" />
+      <br><br>
+      <font><strong>Interés periodico (iP)</strong> </font>
+      <input type="text" name="tasa_Ip_cf" id="tasa_Ip_cf" class="redondeado" placeholder="%" onchange="calcular_tasa('Ip')" />
+      <br><br>
+      
+      </form>
+    </div>
+
+<!-- ************************************************Inicio del formulario de CREDITO CON PERIODO DE GRACIA******** -->
+    <div id="menu1" class="tab-pane fade">
+        <h3> <center> <strong> CRÉDITO CON PERIODO DE GRACIA PROPIAMENTE DICHO </strong> </center> </h3>
+        <br>
+
+        <form action="" name="Pgracia" id="2" method="post" >
+        <br>
+
+        <font><strong>Seleccionar plazo</strong> </font>  <select name="plazo" id="plazo1" class="redondeado">
+            
+            <option value="60" selected>60 meses</option> 
+            <option value="72">72 meses</option>
+            <option value="84">84 meses</option>
+            <option value="96">96 meses</option>
+            <option value="108">108 meses</option>
+            <option value="120">120 meses</option>
+
+        </select>
+        <br><br>
+        <font><strong>Periodo de gracia</strong> </font> <select name="gracia" id="gracia" class="redondeado">
+            
+          <option value="24" selected> 24 meses</option>
+          <option value="36" > 36 meses</option>
+
+        </select>
+        <br><br>
+
+        <font><strong>Amortización</strong> </font>  <select name="amortizacion1" class="redondeado" id="amortizacion1">
+            
+          <option value="mensual1"  selected>Mensual</option> 
+          <option value="bimestral1" >Trimestral</option>
+            
+        </select>
+        <br><br>
+
+      <h4>Tasa de interes:</h4>
+      <font><strong>Efectiva anual (EA)</strong> </font>
+      <input type="text" name="tasa_EA_cf1" id="tasa_EA_cf1" class="redondeado" placeholder="%" onchange="calcularTasaMuerta('EA1')" />
+      <br><br>
+      <font><strong>Nominal Anual (NA)</strong> </font>
+      <input type="text" name="tasa_NA_cf1" id="tasa_NA_cf1" class="redondeado" placeholder="%" onchange="calcularTasaMuerta('NA1')" />
+      <br><br>
+      <font><strong>Interés periodico (iP)</strong> </font>
+      <input type="text" name="tasa_Ip_cf1" id="tasa_Ip_cf1" class="redondeado" placeholder="%" onchange="calcularTasaMuerta('Ip1')" />
+      <br><br>
+            
+      </form>
+
+      
+    </div>
+    <br><br>
+    </div>
+    
+<!-- ************************************************Inicio MUESTRA DE LA TABLA CON LAS CUOTAS******** -->
+   
+<div id="boton" class="form-pg-button" onclick="mostrar()">
+
+<center> <strong>MOSTRAR TABLA DE CUOTAS</strong></center>
+
+</div>
+<div id="mostrarTabla" class="tab-content"  style="background-color:white; border: #E9E7E6 5px solid; border-radius: 20px; display: none;">
+  Tabla de cuotas
+
+    <table class="table table-striped" id="tablaFija">
+    <thead>
+      <tr>
+        <th>Cuota</th>
+        <th>Saldo a Capital</th>
+        <th>Amortización Capital</th>
+        <th>Amortización Intereses</th>
+        <th>Cuota fija</th>
+        <th>Flujo caja</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <button id="button_pg" class="form-pg-button" onclick="PDF()"><strong>Imprimir cuadro en formato PDF</strong></button>
+    </div>
+
+</div>
+</body>
+</html>
